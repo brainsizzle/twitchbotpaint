@@ -1,0 +1,20 @@
+debug: false
+bot:
+  name: "paintbot2"
+  version: "0.0.1"
+
+api:
+  # Twitch Application Client Id
+  twitch_client_id: ***
+
+  # Twitch Application Client Secret
+  twitch_client_secret: ***
+
+# Credentials
+credentials:
+  # OAuth Token for IRC USer (You can get yours here: http://twitchapps.com/tmi/)
+  irc: oauth: ***
+
+# Channels - The bot will connect to all listed channels
+channels:
+  - brainsizzle
