@@ -8,35 +8,30 @@ data class Shape(val type: Type) {
         return color
     }
 
-    // todo target position, move speed  for animations
-    fun moveY(delta: Int) {
-        position.y -= delta
-    }
-
-     fun moveX(delta: Int) {
-        position.x -= delta
-    }
-
     fun setColor(red: Int, green: Int, blue: Int) {
         color = Color(red, green, blue)
     }
 
+    // todo rotation animation
+    var rotationDegress = 0.0
     var position: Position = Position(100.0, 100.0)
     var size: Int = 100
     var color: Color = Color.BLACK
 
     var positionAnimations = mutableListOf<PositionAnimation>()
+    var rotationAnimations = mutableListOf<RotationAnimation>()
 }
 
 data class PositionAnimation(val positionOffSet : Position, var stepsRemaining : Int)
+data class RotationAnimation(val degreesToRotatePerStep : Double, var stepsRemaining : Int)
 
 enum class Type {
-    Circle
+    Circle,
+    Line,
 }
 
 data class Position(var x: Double, var y: Double) {
 
-    // todo later animations
     fun getXCoordinate() : Int {
         return x.toInt()
     }
