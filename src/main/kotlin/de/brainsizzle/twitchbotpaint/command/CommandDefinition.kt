@@ -5,13 +5,18 @@ val commandDefinitions = mutableListOf<CommandDefinition>()
 fun initCommands() {
     commandDefinitions.add(CommandDefinition(listOf("circle"), CommandName.Circle, CommandType.Shape, listOf(ParameterType.Solo, ParameterType.WithInt)))
     commandDefinitions.add(CommandDefinition(listOf("line"), CommandName.Line, CommandType.Shape, listOf(ParameterType.Solo, ParameterType.WithInt)))
-    commandDefinitions.add(CommandDefinition(listOf("u", "up"), CommandName.Up, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
-    commandDefinitions.add(CommandDefinition(listOf("d", "down"), CommandName.Down, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
-    commandDefinitions.add(CommandDefinition(listOf("l", "left"), CommandName.Left, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
-    commandDefinitions.add(CommandDefinition(listOf("r", "right"), CommandName.Right, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("up", "u"), CommandName.Up, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("down", "d"), CommandName.Down, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("left", "l"), CommandName.Left, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("right", "r"), CommandName.Right, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
     commandDefinitions.add(CommandDefinition(listOf("color", "colour", "col"), CommandName.Color, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
     commandDefinitions.add(CommandDefinition(listOf("delete", "del"), CommandName.Delete, CommandType.Delete, listOf(ParameterType.Solo)))
-    commandDefinitions.add(CommandDefinition(listOf("rot", "rotate"), CommandName.Rotate, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("rotate", "rot"), CommandName.Rotate, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("help"), CommandName.Help, CommandType.PrintToChat, listOf(ParameterType.Solo)))
+}
+
+fun printHelp() : String {
+    return commandDefinitions.joinToString(", ") { commandDefinition -> commandDefinition.matches.first() }
 }
 
 fun findByDefinitionByName(name: CommandName) : CommandDefinition? {
@@ -48,12 +53,14 @@ enum class CommandName {
     Color,
     Delete,
     Rotate,
+    Help,
 }
 
 enum class CommandType {
     Shape,
     Edit,
-    Delete
+    Delete,
+    PrintToChat,
 }
 
 enum class ParameterType{

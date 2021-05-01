@@ -7,6 +7,7 @@ import com.github.philippheuer.events4j.simple.SimpleEventHandler
 import com.github.twitch4j.TwitchClient
 import com.github.twitch4j.TwitchClientBuilder
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent
+import de.brainsizzle.twitchbotpaint.command.printHelp
 
 class BotRunner(private val messageCallback: MessageCallback) {
 
@@ -48,6 +49,7 @@ class BotRunner(private val messageCallback: MessageCallback) {
         registerFeatures(twitchClient)
         start(config, twitchClient)
 
+
         println("finished")
     }
 
@@ -60,21 +62,25 @@ class BotRunner(private val messageCallback: MessageCallback) {
     private fun registerFeatures(twitchClient: TwitchClient) {
         val eventHandler: SimpleEventHandler = twitchClient.eventManager.getEventHandler(SimpleEventHandler::class.java)
 
-        eventHandler.onEvent(
-                ChannelMessageEvent::class.java
-        ) { event: ChannelMessageEvent -> onChannelMessage(event) }
+        eventHandler.onEvent(ChannelMessageEvent::class.java) {
+            event: ChannelMessageEvent -> onChannelMessage(event)
+        }
     }
 
     private fun onChannelMessage(event: ChannelMessageEvent) {
+        val message = event.message
         System.out.printf(
                 "Channel [%s] - User[%s] - Message [%s]%n",
                 event.channel.name,
                 event.user.name,
-                event.message
+                message
         )
         val prefix = "!p "
-        if (event.message != null && event.message.startsWith(prefix)) {
-            messageCallback.handlePaintMessage(event.user.name, event.message.substring(prefix.lastIndex))
+        if (message != null && message.startsWith(prefix)) {
+            val returnMessage = messageCallback.handlePaintMessage(event.user.name, message.substring(prefix.lastIndex))
+            if (returnMessage != null) {
+                event.twitchChat.sendMessage(event.channel.name, returnMessage);
+            }
         }
     }
 

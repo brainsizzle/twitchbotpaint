@@ -2,8 +2,7 @@ package de.brainsizzle.twitchbotpaint
 
 import de.brainsizzle.twitchbotpaint.bot.BotRunner
 import de.brainsizzle.twitchbotpaint.bot.MessageCallback
-import de.brainsizzle.twitchbotpaint.command.initCommands
-import de.brainsizzle.twitchbotpaint.command.parseCommands
+import de.brainsizzle.twitchbotpaint.command.*
 import de.brainsizzle.twitchbotpaint.paint.Display
 import de.brainsizzle.twitchbotpaint.paint.Shape
 import de.brainsizzle.twitchbotpaint.paint.animateAll
@@ -45,13 +44,31 @@ class GameLoop : MessageCallback, ShapeLookup {
         return shapes
     }
 
-    override fun handlePaintMessage(userName: String, messagePayload: String) {
+    override fun handlePaintMessage(userName: String, messagePayload: String) : String? {
+        var returnMessage : String? = null
         val parsedCommands = parseCommands(messagePayload)
         if (parsedCommands.isNotEmpty()) {
+
+            returnMessage = printToChat(parsedCommands)
+
             updateDisplayData(userDisplayData, userName, parsedCommands)
             updateShapes()
             display.canvas.repaint()
         }
+        return returnMessage
+    }
+
+    private fun printToChat(parsedCommands: List<Command>) : String? {
+        val distinctPrintToChatCommandNames = parsedCommands
+                .filter { command -> command.commandDefinition.commandType == CommandType.PrintToChat }
+                .map { command -> command.commandDefinition.commandName }
+                .distinct()
+        for (commandName in distinctPrintToChatCommandNames) {
+            if (commandName == CommandName.Help) {
+                return printHelp()
+            }
+        }
+        return null
     }
 
     private fun updateShapes() {
