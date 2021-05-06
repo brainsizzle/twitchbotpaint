@@ -24,13 +24,13 @@ class GameLoop : MessageCallback, ShapeLookup {
         initCommands()
 
 //      to init canvas with any shape
-        updateDisplayData(userDisplayData, "dumm1", parseCommands("rectangle 80 20"))
+        updateDisplayData(userDisplayData, "dumm1", parseCommands("line 20 color 0 125 255"))
         updateShapes()
 
         display.canvas.repaint()
-
-        val botRunner = BotRunner(this)
-        botRunner.init()
+//
+//        val botRunner = BotRunner(this)
+//        botRunner.init()
 
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {

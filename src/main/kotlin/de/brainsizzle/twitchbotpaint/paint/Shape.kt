@@ -12,6 +12,10 @@ data class Shape(val type: Type) {
         color = Color(red, green, blue)
     }
 
+    fun setColor(rgb: Array<Int>) {
+        color = Color(rgb[0], rgb[1], rgb[2])
+    }
+
     // todo rotation animation
     var rotationDegress = 0.0
     var position: Position = Position(100.0, 100.0)
@@ -22,10 +26,12 @@ data class Shape(val type: Type) {
 
     var positionAnimations = mutableListOf<PositionAnimation>()
     var rotationAnimations = mutableListOf<RotationAnimation>()
+    var colorAnimations = mutableListOf<ColorAnimation>()
 }
 
 data class PositionAnimation(val positionOffSet : Position, var stepsRemaining : Int)
 data class RotationAnimation(val degreesToRotatePerStep : Double, var stepsRemaining : Int)
+data class ColorAnimation(val rBitsPerStep : Double, val gBitsForStep: Double, val bBitsForStep: Double, var stepsRemaining : Int)
 
 enum class Type {
     Circle,

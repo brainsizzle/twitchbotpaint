@@ -4,13 +4,15 @@ import de.brainsizzle.twitchbotpaint.command.Command
 import de.brainsizzle.twitchbotpaint.command.CommandName
 import de.brainsizzle.twitchbotpaint.command.CommandType
 import de.brainsizzle.twitchbotpaint.paint.*
+import okhttp3.internal.immutableListOf
+import java.util.*
 
 fun updateDisplayData(userDisplayData: MutableMap<String, MutableList<Shape>>, user: String, commands: List<Command>) {
     val existingShapes = userDisplayData.getOrPut(user, { mutableListOf() })
     var activeShape = existingShapes.lastOrNull()
     for (command in commands) {
         if (CommandType.Shape == command.commandDefinition.commandType) {
-           activeShape = fabricateShape(command)
+            activeShape = fabricateShape(command)
             existingShapes.add(activeShape)
         } else if (activeShape != null) {
             if (CommandType.Edit == command.commandDefinition.commandType) {
@@ -29,39 +31,51 @@ fun applyEdit(command: Command, shape: Shape) {
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limit(command.commandIntParameters[0], 10, 250)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(0.0, -delta/40.0), 40))
+        shape.positionAnimations.add(PositionAnimation(Position(0.0, -delta / 40.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Down) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limit(command.commandIntParameters[0], 10, 250)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(0.0, delta/40.0), 40))
+        shape.positionAnimations.add(PositionAnimation(Position(0.0, delta / 40.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Left) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limit(command.commandIntParameters[0], 10, 150)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(-delta/40.0, 0.0), 40))
+        shape.positionAnimations.add(PositionAnimation(Position(-delta / 40.0, 0.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Right) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limit(command.commandIntParameters[0], 10, 150)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(delta/40.0, 0.0), 40))
+        shape.positionAnimations.add(PositionAnimation(Position(delta / 40.0, 0.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Color) {
-        var red = 0
-        var green = 0
-        var blue = 0
+        val newRgb = arrayOf(0, 0, 0);
+
         if (command.commandIntParameters.size > 0) {
-            red = limit(command.commandIntParameters[0], 0, 255)
+            newRgb[0] = limit(command.commandIntParameters[0], 0, 255)
         }
         if (command.commandIntParameters.size > 1) {
-            green = limit(command.commandIntParameters[1], 0, 255)
+            newRgb[1] = limit(command.commandIntParameters[1], 0, 255)
         }
         if (command.commandIntParameters.size > 2) {
-            blue = limit(command.commandIntParameters[2], 0, 255)
+            newRgb[2] = limit(command.commandIntParameters[2], 0, 255)
         }
-        shape.setColor(red, green, blue)
+
+        val rDiff = newRgb[0] - shape.color.red
+        val gDiff = newRgb[1] - shape.color.green
+        val bDiff = newRgb[2] - shape.color.blue
+
+        val rgbDiff = arrayOf(rDiff, gDiff, bDiff)
+        val largestDiff = rgbDiff.maxOrNull()
+
+        val rStep = rDiff.toDouble() / largestDiff!!
+        val gStep = gDiff.toDouble() / largestDiff
+        val bStep = bDiff.toDouble() / largestDiff
+
+        shape.colorAnimations.add(ColorAnimation(rStep, gStep, bStep, largestDiff))
+
     } else if (command.commandDefinition.commandName == CommandName.Rotate) {
         var degrees = 45
         if (command.commandIntParameters.size > 0) {
@@ -72,7 +86,7 @@ fun applyEdit(command: Command, shape: Shape) {
 }
 
 fun fabricateShape(command: Command): Shape {
-    return when(command.commandDefinition.commandName) {
+    return when (command.commandDefinition.commandName) {
         CommandName.Circle -> fabricateCircle(command)
         CommandName.Line -> fabricateLine(command)
         CommandName.Square -> fabricateSquare(command)
@@ -83,8 +97,7 @@ fun fabricateShape(command: Command): Shape {
 
 fun fabricateRectangle(command: Command): Shape {
     val shape = Shape(Type.Rectangle)
-    if (command.commandIntParameters.isNotEmpty())
-    {
+    if (command.commandIntParameters.isNotEmpty()) {
         shape.width = limit(command.commandIntParameters[0], 10, 150)
         shape.height = limit(command.commandIntParameters[1], 10, 150)
     }
@@ -93,8 +106,7 @@ fun fabricateRectangle(command: Command): Shape {
 
 fun fabricateSquare(command: Command): Shape {
     val shape = Shape(Type.Square)
-    if (command.commandIntParameters.isNotEmpty())
-    {
+    if (command.commandIntParameters.isNotEmpty()) {
         shape.size = limit(command.commandIntParameters[0], 10, 150)
     }
     return shape
