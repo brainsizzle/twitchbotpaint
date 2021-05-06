@@ -16,32 +16,31 @@ fun drawRectangle(g2: Graphics2D, shape: Shape) {
     g2.color = shape.getRenderingColor()
     g2.stroke = BasicStroke(3.0f)
     g2.drawRect(
-        shape.position.getXCoordinate(),
-        shape.position.getYCoordinate(),
-        shape.width,
-        shape.height
+        calcCenter(shape.position.getXCoordinate(), shape.width),
+        calcCenter(shape.position.getYCoordinate(), shape.height),
+        shape.width, shape.height
     )
 }
 
 fun drawSquare(g2: Graphics2D, shape: Shape) {
     g2.color = shape.getRenderingColor()
     g2.stroke = BasicStroke(3.0f)
+
+    val previousTransform = g2.transform
+
+    val position = shape.position
+    val xCenter = calcCenter(position.getXCoordinate(), shape.size)
+    val yCenter = calcCenter(position.getYCoordinate(), shape.size)
+    g2.rotate(Math.toRadians(shape.rotationDegress),  position.x, position.y)
+
     g2.drawRect(
-        shape.position.getXCoordinate(),
-        shape.position.getYCoordinate(),
+        xCenter,
+        yCenter,
         shape.size, shape.size
     )
-}
 
-//fun drawCircle(g2: Graphics2D, shape: Shape) {
-//    g2.color = shape.getRenderingColor()
-//    g2.stroke = BasicStroke(3.0f)
-//    g2.drawOval(
-//        calcCenter(shape.position.getXCoordinate(), shape.size),
-//        calcCenter(shape.position.getYCoordinate(), shape.size),
-//        shape.size, shape.size
-//    )
-//}
+    g2.transform = previousTransform
+}
 
 fun drawLine(g2: Graphics2D, shape: Shape) {
     g2.color = shape.getRenderingColor()
@@ -61,6 +60,6 @@ fun drawLine(g2: Graphics2D, shape: Shape) {
 
 }
 
-//fun calcCenter(coordinate: Int, size: Int): Int {
-//    return coordinate - size / 2
-//}
+fun calcCenter(coordinate: Int, size: Int): Int {
+    return coordinate - size / 2
+}
