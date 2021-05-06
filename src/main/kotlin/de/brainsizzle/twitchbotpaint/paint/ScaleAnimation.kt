@@ -1,6 +1,6 @@
 package de.brainsizzle.twitchbotpaint.paint
 
-class ScaleAnimation(var factorPerStep: Double, var stepsRemaining: Int) : Animation {
+class ScaleAnimation(var step: Double, var stepsRemaining: Int) : Animation {
 
     private var currentValue : Double? = null
 
@@ -9,7 +9,7 @@ class ScaleAnimation(var factorPerStep: Double, var stepsRemaining: Int) : Anima
             currentValue = shape.size.toDouble()
         }
         if (stepsRemaining > 0) {
-            currentValue = currentValue!! * factorPerStep
+            currentValue = currentValue!! + step
             shape.size = currentValue!!.toInt()
             stepsRemaining--
             return false

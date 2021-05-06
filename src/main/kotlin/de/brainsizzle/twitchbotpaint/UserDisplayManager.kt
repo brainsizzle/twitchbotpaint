@@ -72,10 +72,12 @@ fun applyEdit(command: Command, shape: Shape) {
         shape.animations.add(element)
     } else if (command.commandDefinition.commandName == CommandName.Scale) {
         var factor = 1.2
-        if (command.commandDoubleParameters.size > 0) {
+        if (command.commandDoubleParameters.isNotEmpty()) {
             factor = limitDouble(command.commandDoubleParameters[0], -5.0, 5.0)
+        } else if (command.commandIntParameters.isNotEmpty()) {
+            factor = limitInt(command.commandIntParameters[0], -5, 5).toDouble()
         }
-        shape.animations.add(ScaleAnimation(factor / 40.0, 40))
+        shape.animations.add(ScaleAnimation((shape.size * factor - shape.size) / 40.0, 40))
     }
 }
 
