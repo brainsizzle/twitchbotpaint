@@ -23,8 +23,8 @@ class GameLoop : MessageCallback, ShapeLookup {
     fun init() {
         initDisplay()
         initCommands()
-        initDefaultShapes()
-//        initBotRunner()
+//        initDefaultShapes()
+        initBotRunner()
         startLoop()
     }
 
