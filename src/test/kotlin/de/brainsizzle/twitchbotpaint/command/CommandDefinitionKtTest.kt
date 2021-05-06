@@ -8,7 +8,7 @@ internal class CommandDefinitionKtTest {
     @Test
     fun testPrintHelp() {
         initCommands()
-        Assertions.assertEquals("circle, line, up, down, left, right, color, delete, rotate, help", printHelp())
+        Assertions.assertEquals("circle, line, up, down, left, right, color, delete, rotate, scale, help, square, rectangle", printHelp())
     }
 
 }

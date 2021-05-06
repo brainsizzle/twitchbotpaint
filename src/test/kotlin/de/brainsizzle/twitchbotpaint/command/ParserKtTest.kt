@@ -24,11 +24,11 @@ internal class ParserKtTest {
 
     @Test
     fun parseCommand() {
-        Assertions.assertEquals(listOf(Command(findByDefinitionByName(CommandName.Up)!!, listOf())),
-                parseCommands( " n "))
+        Assertions.assertEquals(listOf(Command(findByDefinitionByName(CommandName.Up)!!, emptyList(), emptyList())),
+                parseCommands( " up "))
         Assertions.assertEquals(listOf(
-                Command(findByDefinitionByName(CommandName.Circle)!!, listOf(20)),
-                Command(findByDefinitionByName(CommandName.Up)!!, listOf(50))),
-                parseCommands( " circle 20 north 50 "))
+                Command(findByDefinitionByName(CommandName.Circle)!!, listOf(20), emptyList()),
+                Command(findByDefinitionByName(CommandName.Up)!!, listOf(50), emptyList())),
+                parseCommands( " circle 20 up 50 "))
     }
 }

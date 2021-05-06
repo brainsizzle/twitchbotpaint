@@ -20,12 +20,9 @@ data class Shape(val type: Type) {
     var height: Int = 100
     var color: Color = Color.BLACK
 
-    var positionAnimations = mutableListOf<PositionAnimation>()
-    var rotationAnimations = mutableListOf<RotationAnimation>()
+    var animations = mutableListOf<Animation>()
 }
 
-data class PositionAnimation(val positionOffSet : Position, var stepsRemaining : Int)
-data class RotationAnimation(val degreesToRotatePerStep : Double, var stepsRemaining : Int)
 
 enum class Type {
     Circle,
