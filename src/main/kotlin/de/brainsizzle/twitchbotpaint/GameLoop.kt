@@ -10,34 +10,47 @@ import java.util.*
 
 fun main() {
     val gameLoop = GameLoop()
-    gameLoop.start()
+    gameLoop.init()
 }
 
 class GameLoop : MessageCallback, ShapeLookup {
 
-    private val display = Display(this)
     private val userDisplayData = mutableMapOf<String, MutableList<Shape>>()
 
-    private var shapes = listOf<Shape>()
+    private var shapes = emptyList<Shape>()
+    private var display : Display? = null
 
-    fun start() {
+    fun init() {
+        initDisplay()
         initCommands()
+        initDefaultShapes()
+//        initBotRunner()
+        startLoop()
+    }
 
-//      to init canvas with any shape
-        updateDisplayData(userDisplayData, "dumm1", parseCommands("line 20 color 0 125 255"))
-        updateShapes()
+    fun initDisplay() {
+        display = Display(this)
+    }
 
-        display.canvas.repaint()
-//
-//        val botRunner = BotRunner(this)
-//        botRunner.init()
-
+    fun startLoop() {
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 animateAll(shapes)
-                display.canvas.repaint()
+                display?.canvas?.repaint()
             }
         }, 30, 20)
+    }
+
+    fun initBotRunner() {
+        val botRunner = BotRunner(this)
+        botRunner.init()
+    }
+
+    fun initDefaultShapes() {
+        //      to init canvas with any shape
+               updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80 col 0 125 255"))
+        updateShapes()
+        display?.canvas?.repaint()
     }
 
     override fun calcShapes(): List<Shape> {
@@ -45,17 +58,23 @@ class GameLoop : MessageCallback, ShapeLookup {
     }
 
     override fun handlePaintMessage(userName: String, messagePayload: String): String? {
-        var returnMessage: String? = null
-        val parsedCommands = parseCommands(messagePayload)
-        if (parsedCommands.isNotEmpty()) {
+        try {
+            var returnMessage: String? = null
+            val parsedCommands = parseCommands(messagePayload)
+            if (parsedCommands.isNotEmpty()) {
 
-            returnMessage = printToChat(parsedCommands)
+                returnMessage = printToChat(parsedCommands)
 
-            updateDisplayData(userDisplayData, userName, parsedCommands)
-            updateShapes()
-            display.canvas.repaint()
+                updateDisplayData(userDisplayData, userName, parsedCommands)
+                updateShapes()
+                display?.canvas?.repaint()
+            }
+            return returnMessage
         }
-        return returnMessage
+        catch (ex: Exception) {
+            println("caught in game loop: " + ex)
+            return null
+        }
     }
 
     private fun printToChat(parsedCommands: List<Command>): String? {
