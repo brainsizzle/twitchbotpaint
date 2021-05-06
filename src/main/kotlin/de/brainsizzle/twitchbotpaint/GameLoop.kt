@@ -10,24 +10,29 @@ import java.util.*
 
 fun main() {
     val gameLoop = GameLoop()
-    gameLoop.start()
+    gameLoop.initDisplay()
+    gameLoop.startLoop()
 }
 
 class GameLoop : MessageCallback, ShapeLookup {
 
-    private val display = Display(this)
     private val userDisplayData = mutableMapOf<String, MutableList<Shape>>()
 
-    private var shapes = listOf<Shape>()
+    private var shapes = emptyList<Shape>()
+    private var display : Display? = null
 
-    fun start() {
+    fun initDisplay() {
+        display = Display(this)
+    }
+
+    fun startLoop() {
         initCommands()
 
 //      to init canvas with any shape
 //        updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80"))
         updateShapes()
 
-        display.canvas.repaint()
+        display?.canvas?.repaint()
 
         val botRunner = BotRunner(this)
         botRunner.init()
@@ -35,7 +40,7 @@ class GameLoop : MessageCallback, ShapeLookup {
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 animateAll(shapes)
-                display.canvas.repaint()
+                display?.canvas?.repaint()
             }
         }, 30, 20)
     }
@@ -54,12 +59,12 @@ class GameLoop : MessageCallback, ShapeLookup {
 
                 updateDisplayData(userDisplayData, userName, parsedCommands)
                 updateShapes()
-                display.canvas.repaint()
+                display?.canvas?.repaint()
             }
             return returnMessage
         }
         catch (ex: Exception) {
-            println(ex)
+            println("caught in game loop: " + ex)
             return null
         }
     }

@@ -10,15 +10,18 @@ import javax.swing.JPanel
 class Canvas(val shapeLookup: ShapeLookup) : JPanel(true) {
 
     override fun paint(g: Graphics) {
-        val g2 = g as Graphics2D
-        g2.color = Color(150, 230, 230)
-        g2.fillRect(0, 0, this.width, this.height)
-        setRenderingHints(g2)
+        try {
 
-        val calcShapes = shapeLookup.calcShapes()
-        // beware of race condition at startup
-        if (calcShapes != null) {
+            val g2 = g as Graphics2D
+            g2.color = Color(150, 230, 230)
+            g2.fillRect(0, 0, this.width, this.height)
+            setRenderingHints(g2)
+
+            val calcShapes = shapeLookup.calcShapes()
+            // beware of race condition at startup
             calcShapes.forEach { shape -> drawShape(g2, shape) }
+        } catch (ex: Exception) {
+            println("caught in paint loop: " + ex + ex.stackTraceToString())
         }
     }
 

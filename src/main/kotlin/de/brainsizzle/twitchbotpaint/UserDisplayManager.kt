@@ -75,7 +75,7 @@ fun applyEdit(command: Command, shape: Shape) {
         if (command.commandDoubleParameters.size > 0) {
             factor = limitDouble(command.commandDoubleParameters[0], -5.0, 5.0)
         }
-        // shape.rotationAnimations.add(ScaleAnimation(degrees / 40.0, 40))
+        shape.animations.add(ScaleAnimation(factor / 40.0, 40))
     }
 }
 
@@ -93,8 +93,8 @@ fun fabricateRectangle(command: Command): Shape {
     val shape = Shape(Type.Rectangle)
     if (command.commandIntParameters.isNotEmpty())
     {
-        shape.width = limit(command.commandIntParameters[0], 10, 150)
-        shape.height = limit(command.commandIntParameters[1], 10, 150)
+        shape.width = limitInt(command.commandIntParameters[0], 10, 150)
+        shape.height = limitInt(command.commandIntParameters[1], 10, 150)
     }
     return shape
 }
