@@ -84,8 +84,19 @@ fun fabricateShape(command: Command): Shape {
         CommandName.Circle -> fabricateCircle(command)
         CommandName.Line -> fabricateLine(command)
         CommandName.Square -> fabricateSquare(command)
+        CommandName.Rectangle -> fabricateRectangle(command)
         else -> Shape(Type.Circle)
     }
+}
+
+fun fabricateRectangle(command: Command): Shape {
+    val shape = Shape(Type.Rectangle)
+    if (command.commandIntParameters.isNotEmpty())
+    {
+        shape.width = limit(command.commandIntParameters[0], 10, 150)
+        shape.height = limit(command.commandIntParameters[1], 10, 150)
+    }
+    return shape
 }
 
 fun fabricateSquare(command: Command): Shape {
