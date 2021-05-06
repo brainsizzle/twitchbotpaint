@@ -23,8 +23,8 @@ class GameLoop : MessageCallback, ShapeLookup {
     fun start() {
         initCommands()
 
-        // to init canvas with any shape
-        // updateDisplayData(userDisplayData,"dumm1", parseCommands("circle 80 north 20"))
+//      to init canvas with any shape
+        updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80"))
         updateShapes()
 
         display.canvas.repaint()
@@ -40,12 +40,12 @@ class GameLoop : MessageCallback, ShapeLookup {
         }, 30, 20)
     }
 
-    override fun calcShapes() : List<Shape> {
+    override fun calcShapes(): List<Shape> {
         return shapes
     }
 
-    override fun handlePaintMessage(userName: String, messagePayload: String) : String? {
-        var returnMessage : String? = null
+    override fun handlePaintMessage(userName: String, messagePayload: String): String? {
+        var returnMessage: String? = null
         val parsedCommands = parseCommands(messagePayload)
         if (parsedCommands.isNotEmpty()) {
 
@@ -58,7 +58,7 @@ class GameLoop : MessageCallback, ShapeLookup {
         return returnMessage
     }
 
-    private fun printToChat(parsedCommands: List<Command>) : String? {
+    private fun printToChat(parsedCommands: List<Command>): String? {
         val distinctPrintToChatCommandNames = parsedCommands
                 .filter { command -> command.commandDefinition.commandType == CommandType.PrintToChat }
                 .map { command -> command.commandDefinition.commandName }
