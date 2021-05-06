@@ -13,6 +13,8 @@ fun initCommands() {
     commandDefinitions.add(CommandDefinition(listOf("delete", "del"), CommandName.Delete, CommandType.Delete, listOf(ParameterType.Solo)))
     commandDefinitions.add(CommandDefinition(listOf("rotate", "rot"), CommandName.Rotate, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
     commandDefinitions.add(CommandDefinition(listOf("help"), CommandName.Help, CommandType.PrintToChat, listOf(ParameterType.Solo)))
+    commandDefinitions.add(CommandDefinition(listOf("square"), CommandName.Square, CommandType.Shape, listOf(ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("rectangle"), CommandName.Rectangle, CommandType.Shape, listOf(ParameterType.WithInt, ParameterType.WithInt)))
 }
 
 fun printHelp() : String {
@@ -54,6 +56,8 @@ enum class CommandName {
     Delete,
     Rotate,
     Help,
+    Square,
+    Rectangle,
 }
 
 enum class CommandType {
@@ -65,5 +69,5 @@ enum class CommandType {
 
 enum class ParameterType{
     Solo,
-    WithInt
+    WithInt,
 }

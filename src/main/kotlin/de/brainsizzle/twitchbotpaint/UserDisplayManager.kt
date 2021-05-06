@@ -75,8 +75,18 @@ fun fabricateShape(command: Command): Shape {
     return when(command.commandDefinition.commandName) {
         CommandName.Circle -> fabricateCircle(command)
         CommandName.Line -> fabricateLine(command)
+        CommandName.Square -> fabricateSquare(command)
         else -> Shape(Type.Circle)
     }
+}
+
+fun fabricateSquare(command: Command): Shape {
+    val shape = Shape(Type.Square)
+    if (command.commandIntParameters.isNotEmpty())
+    {
+        shape.size = limit(command.commandIntParameters[0], 10, 150)
+    }
+    return shape
 }
 
 fun fabricateCircle(command: Command): Shape {

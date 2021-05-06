@@ -28,6 +28,8 @@ data class RotationAnimation(val degreesToRotatePerStep : Double, var stepsRemai
 enum class Type {
     Circle,
     Line,
+    Square,
+    Rectangle
 }
 
 data class Position(var x: Double, var y: Double) {
