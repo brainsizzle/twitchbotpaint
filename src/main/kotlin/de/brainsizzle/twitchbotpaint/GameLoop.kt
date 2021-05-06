@@ -10,8 +10,7 @@ import java.util.*
 
 fun main() {
     val gameLoop = GameLoop()
-    gameLoop.initDisplay()
-    gameLoop.startLoop()
+    gameLoop.init()
 }
 
 class GameLoop : MessageCallback, ShapeLookup {
@@ -21,21 +20,19 @@ class GameLoop : MessageCallback, ShapeLookup {
     private var shapes = emptyList<Shape>()
     private var display : Display? = null
 
+    fun init() {
+        initDisplay()
+        initCommands()
+        initDefaultShapes()
+        initBotRunner()
+        startLoop()
+    }
+
     fun initDisplay() {
         display = Display(this)
     }
 
     fun startLoop() {
-        initCommands()
-
-//      to init canvas with any shape
-//        updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80"))
-        updateShapes()
-
-        display?.canvas?.repaint()
-
-        val botRunner = BotRunner(this)
-        botRunner.init()
 
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
@@ -43,6 +40,18 @@ class GameLoop : MessageCallback, ShapeLookup {
                 display?.canvas?.repaint()
             }
         }, 30, 20)
+    }
+
+    fun initBotRunner() {
+        val botRunner = BotRunner(this)
+        botRunner.init()
+    }
+
+    fun initDefaultShapes() {
+        //      to init canvas with any shape
+        //       updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80"))
+        updateShapes()
+        display?.canvas?.repaint()
     }
 
     override fun calcShapes(): List<Shape> {
