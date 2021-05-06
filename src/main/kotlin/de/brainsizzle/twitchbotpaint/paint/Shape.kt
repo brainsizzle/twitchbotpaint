@@ -16,6 +16,8 @@ data class Shape(val type: Type) {
     var rotationDegress = 0.0
     var position: Position = Position(100.0, 100.0)
     var size: Int = 100
+    var width: Int = 100
+    var height: Int = 100
     var color: Color = Color.BLACK
 
     var positionAnimations = mutableListOf<PositionAnimation>()

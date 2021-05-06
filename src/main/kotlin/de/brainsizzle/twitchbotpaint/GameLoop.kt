@@ -24,7 +24,7 @@ class GameLoop : MessageCallback, ShapeLookup {
         initCommands()
 
 //      to init canvas with any shape
-        updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80"))
+        updateDisplayData(userDisplayData, "dumm1", parseCommands("rectangle 80 20"))
         updateShapes()
 
         display.canvas.repaint()

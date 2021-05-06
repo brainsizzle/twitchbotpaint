@@ -9,7 +9,19 @@ fun drawShape(g2: Graphics2D, shape: Shape) {
         Type.Circle -> drawCircle(g2, shape)
         Type.Line -> drawLine(g2, shape)
         Type.Square -> drawSquare(g2, shape)
+        Type.Rectangle -> drawRectangle(g2, shape)
     }
+}
+
+fun drawRectangle(g2: Graphics2D, shape: Shape) {
+    g2.color = shape.getRenderingColor()
+    g2.stroke = BasicStroke(3.0f)
+    g2.drawRect(
+        shape.position.getXCoordinate(),
+        shape.position.getYCoordinate(),
+        shape.width,
+        shape.height
+    )
 }
 
 fun drawSquare(g2: Graphics2D, shape: Shape) {
