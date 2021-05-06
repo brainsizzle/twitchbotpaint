@@ -24,7 +24,7 @@ class GameLoop : MessageCallback, ShapeLookup {
         initDisplay()
         initCommands()
         initDefaultShapes()
-        initBotRunner()
+//        initBotRunner()
         startLoop()
     }
 
@@ -33,7 +33,6 @@ class GameLoop : MessageCallback, ShapeLookup {
     }
 
     fun startLoop() {
-
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 animateAll(shapes)
@@ -49,7 +48,7 @@ class GameLoop : MessageCallback, ShapeLookup {
 
     fun initDefaultShapes() {
         //      to init canvas with any shape
-        //       updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80"))
+               updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80 col 0 125 255"))
         updateShapes()
         display?.canvas?.repaint()
     }

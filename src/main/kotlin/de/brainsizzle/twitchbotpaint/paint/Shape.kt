@@ -3,7 +3,6 @@ package de.brainsizzle.twitchbotpaint.paint
 import java.awt.Color
 
 data class Shape(val type: Type) {
-    // todo animations for color
     fun getRenderingColor(): Color {
         return color
     }
@@ -12,7 +11,10 @@ data class Shape(val type: Type) {
         color = Color(red, green, blue)
     }
 
-    // todo rotation animation
+    fun setColor(rgb: Array<Int>) {
+        color = Color(rgb[0], rgb[1], rgb[2])
+    }
+
     var rotationDegress = 0.0
     var position: Position = Position(100.0, 100.0)
     var size: Int = 100
@@ -22,7 +24,6 @@ data class Shape(val type: Type) {
 
     var animations = mutableListOf<Animation>()
 }
-
 
 enum class Type {
     Circle,

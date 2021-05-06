@@ -10,7 +10,7 @@ fun updateDisplayData(userDisplayData: MutableMap<String, MutableList<Shape>>, u
     var activeShape = existingShapes.lastOrNull()
     for (command in commands) {
         if (CommandType.Shape == command.commandDefinition.commandType) {
-           activeShape = fabricateShape(command)
+            activeShape = fabricateShape(command)
             existingShapes.add(activeShape)
         } else if (activeShape != null) {
             if (CommandType.Edit == command.commandDefinition.commandType) {
@@ -50,19 +50,31 @@ fun applyEdit(command: Command, shape: Shape) {
         }
         shape.animations.add(MoveAnimation(Position(delta/40.0, 0.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Color) {
-        var red = 0
-        var green = 0
-        var blue = 0
+        val newRgb = arrayOf(0, 0, 0);
+
         if (command.commandIntParameters.size > 0) {
-            red = limitInt(command.commandIntParameters[0], 0, 255)
+            newRgb[0] = limitInt(command.commandIntParameters[0], 0, 255)
         }
         if (command.commandIntParameters.size > 1) {
-            green = limitInt(command.commandIntParameters[1], 0, 255)
+            newRgb[1] = limitInt(command.commandIntParameters[1], 0, 255)
         }
         if (command.commandIntParameters.size > 2) {
-            blue = limitInt(command.commandIntParameters[2], 0, 255)
+            newRgb[2] = limitInt(command.commandIntParameters[2], 0, 255)
         }
-        shape.setColor(red, green, blue)
+
+        val rDiff = newRgb[0] - shape.color.red
+        val gDiff = newRgb[1] - shape.color.green
+        val bDiff = newRgb[2] - shape.color.blue
+
+        val rgbDiff = arrayOf(rDiff, gDiff, bDiff)
+        val largestDiff = rgbDiff.maxOrNull()
+
+        val rStep = rDiff.toDouble() / largestDiff!!
+        val gStep = gDiff.toDouble() / largestDiff
+        val bStep = bDiff.toDouble() / largestDiff
+
+        shape.animations.add(ColorAnimation(rStep, gStep, bStep, largestDiff))
+
     } else if (command.commandDefinition.commandName == CommandName.Rotate) {
         var degrees = 45
         if (command.commandIntParameters.size > 0) {
@@ -82,7 +94,7 @@ fun applyEdit(command: Command, shape: Shape) {
 }
 
 fun fabricateShape(command: Command): Shape {
-    return when(command.commandDefinition.commandName) {
+    return when (command.commandDefinition.commandName) {
         CommandName.Circle -> fabricateCircle(command)
         CommandName.Line -> fabricateLine(command)
         CommandName.Square -> fabricateSquare(command)
