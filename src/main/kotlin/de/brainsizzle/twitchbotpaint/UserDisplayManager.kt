@@ -24,50 +24,58 @@ fun updateDisplayData(userDisplayData: MutableMap<String, MutableList<Shape>>, u
 }
 
 fun applyEdit(command: Command, shape: Shape) {
+
     if (command.commandDefinition.commandName == CommandName.Up) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
-            delta = limit(command.commandIntParameters[0], 10, 250)
+            delta = limitInt(command.commandIntParameters[0], 10, 250)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(0.0, -delta/40.0), 40))
+        shape.animations.add(MoveAnimation(Position(0.0, -delta/40.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Down) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
-            delta = limit(command.commandIntParameters[0], 10, 250)
+            delta = limitInt(command.commandIntParameters[0], 10, 250)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(0.0, delta/40.0), 40))
+        shape.animations.add(MoveAnimation(Position(0.0, delta/40.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Left) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
-            delta = limit(command.commandIntParameters[0], 10, 150)
+            delta = limitInt(command.commandIntParameters[0], 10, 150)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(-delta/40.0, 0.0), 40))
+        shape.animations.add(MoveAnimation(Position(-delta/40.0, 0.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Right) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
-            delta = limit(command.commandIntParameters[0], 10, 150)
+            delta = limitInt(command.commandIntParameters[0], 10, 150)
         }
-        shape.positionAnimations.add(PositionAnimation(Position(delta/40.0, 0.0), 40))
+        shape.animations.add(MoveAnimation(Position(delta/40.0, 0.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Color) {
         var red = 0
         var green = 0
         var blue = 0
         if (command.commandIntParameters.size > 0) {
-            red = limit(command.commandIntParameters[0], 0, 255)
+            red = limitInt(command.commandIntParameters[0], 0, 255)
         }
         if (command.commandIntParameters.size > 1) {
-            green = limit(command.commandIntParameters[1], 0, 255)
+            green = limitInt(command.commandIntParameters[1], 0, 255)
         }
         if (command.commandIntParameters.size > 2) {
-            blue = limit(command.commandIntParameters[2], 0, 255)
+            blue = limitInt(command.commandIntParameters[2], 0, 255)
         }
         shape.setColor(red, green, blue)
     } else if (command.commandDefinition.commandName == CommandName.Rotate) {
         var degrees = 45
         if (command.commandIntParameters.size > 0) {
-            degrees = limit(command.commandIntParameters[0], 0, 720)
+            degrees = limitInt(command.commandIntParameters[0], 0, 720)
         }
-        shape.rotationAnimations.add(RotationAnimation(degrees / 40.0, 40))
+        val element = RotateAnimation(degrees / 40.0, 40)
+        shape.animations.add(element)
+    } else if (command.commandDefinition.commandName == CommandName.Scale) {
+        var factor = 1.2
+        if (command.commandDoubleParameters.size > 0) {
+            factor = limitDouble(command.commandDoubleParameters[0], -5.0, 5.0)
+        }
+        // shape.rotationAnimations.add(ScaleAnimation(degrees / 40.0, 40))
     }
 }
 
@@ -84,7 +92,7 @@ fun fabricateSquare(command: Command): Shape {
     val shape = Shape(Type.Square)
     if (command.commandIntParameters.isNotEmpty())
     {
-        shape.size = limit(command.commandIntParameters[0], 10, 150)
+        shape.size = limitInt(command.commandIntParameters[0], 10, 150)
     }
     return shape
 }
@@ -92,7 +100,7 @@ fun fabricateSquare(command: Command): Shape {
 fun fabricateCircle(command: Command): Shape {
     val shape = Shape(Type.Circle)
     if (command.commandIntParameters.isNotEmpty()) {
-        shape.size = limit(command.commandIntParameters[0], 10, 150)
+        shape.size = limitInt(command.commandIntParameters[0], 10, 150)
     }
     return shape
 }
@@ -100,12 +108,18 @@ fun fabricateCircle(command: Command): Shape {
 fun fabricateLine(command: Command): Shape {
     val shape = Shape(Type.Line)
     if (command.commandIntParameters.isNotEmpty()) {
-        shape.size = limit(command.commandIntParameters[0], 10, 150)
+        shape.size = limitInt(command.commandIntParameters[0], 10, 150)
     }
     return shape
 }
 
-fun limit(value: Int, minValue: Int, maxValue: Int): Int {
+fun limitInt(value: Int, minValue: Int, maxValue: Int): Int {
+    if (value < minValue) return minValue
+    if (value > maxValue) return maxValue
+    return value
+}
+
+fun limitDouble(value: Double, minValue: Double, maxValue: Double): Double {
     if (value < minValue) return minValue
     if (value > maxValue) return maxValue
     return value

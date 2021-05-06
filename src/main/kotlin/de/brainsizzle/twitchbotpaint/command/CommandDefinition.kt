@@ -12,6 +12,7 @@ fun initCommands() {
     commandDefinitions.add(CommandDefinition(listOf("color", "colour", "col"), CommandName.Color, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
     commandDefinitions.add(CommandDefinition(listOf("delete", "del"), CommandName.Delete, CommandType.Delete, listOf(ParameterType.Solo)))
     commandDefinitions.add(CommandDefinition(listOf("rotate", "rot"), CommandName.Rotate, CommandType.Edit, listOf(ParameterType.Solo, ParameterType.WithInt)))
+    commandDefinitions.add(CommandDefinition(listOf("scale"), CommandName.Scale, CommandType.Edit, listOf(ParameterType.WithDouble)))
     commandDefinitions.add(CommandDefinition(listOf("help"), CommandName.Help, CommandType.PrintToChat, listOf(ParameterType.Solo)))
     commandDefinitions.add(CommandDefinition(listOf("square"), CommandName.Square, CommandType.Shape, listOf(ParameterType.WithInt)))
     commandDefinitions.add(CommandDefinition(listOf("rectangle"), CommandName.Rectangle, CommandType.Shape, listOf(ParameterType.WithInt, ParameterType.WithInt)))
@@ -56,6 +57,7 @@ enum class CommandName {
     Delete,
     Rotate,
     Help,
+    Scale,
     Square,
     Rectangle,
 }
@@ -70,4 +72,5 @@ enum class CommandType {
 enum class ParameterType{
     Solo,
     WithInt,
+    WithDouble,
 }

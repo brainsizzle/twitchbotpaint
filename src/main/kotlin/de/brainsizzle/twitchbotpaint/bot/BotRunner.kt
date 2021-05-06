@@ -75,7 +75,7 @@ class BotRunner(private val messageCallback: MessageCallback) {
                 event.user.name,
                 message
         )
-        val prefix = "!p "
+        val prefix = "!"
         if (message != null && message.startsWith(prefix)) {
             val returnMessage = messageCallback.handlePaintMessage(event.user.name, message.substring(prefix.lastIndex))
             if (returnMessage != null) {

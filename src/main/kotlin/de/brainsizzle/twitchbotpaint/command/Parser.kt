@@ -44,7 +44,7 @@ private fun fabricateCommand(commandStarted: CommandDefinition?, parameterIntPar
     // future validate parameter signature
 
     // we need to de-couple the list
-    return Command(commandStarted!!, parameterIntParams.toList())
+    return Command(commandStarted!!, parameterIntParams.toList(), emptyList())
 }
 
 // all to lowercase and all non ascii letters or digits to spaces
