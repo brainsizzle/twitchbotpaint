@@ -1,8 +1,8 @@
 package de.brainsizzle.twitchbotpaint
 
 import de.brainsizzle.twitchbotpaint.bot.BotRunner
-import de.brainsizzle.twitchbotpaint.bot.MessageCallback
 import de.brainsizzle.twitchbotpaint.command.*
+import de.brainsizzle.twitchbotpaint.console.ConsoleInput
 import de.brainsizzle.twitchbotpaint.paint.Display
 import de.brainsizzle.twitchbotpaint.paint.Shape
 import de.brainsizzle.twitchbotpaint.paint.animateAll
@@ -24,7 +24,10 @@ class GameLoop : MessageCallback, ShapeLookup {
         initDisplay()
         initCommands()
 //        initDefaultShapes()
-        initBotRunner()
+
+//        initBotRunner()
+        initConsoleInput()
+        println("got here")
         startLoop()
     }
 
@@ -44,6 +47,11 @@ class GameLoop : MessageCallback, ShapeLookup {
     fun initBotRunner() {
         val botRunner = BotRunner(this)
         botRunner.init()
+    }
+
+    fun initConsoleInput() {
+        val consoleInput = ConsoleInput(this)
+        consoleInput.init()
     }
 
     fun initDefaultShapes() {

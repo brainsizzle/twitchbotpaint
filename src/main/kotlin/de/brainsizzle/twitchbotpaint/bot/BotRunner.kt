@@ -7,7 +7,7 @@ import com.github.philippheuer.events4j.simple.SimpleEventHandler
 import com.github.twitch4j.TwitchClient
 import com.github.twitch4j.TwitchClientBuilder
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent
-import de.brainsizzle.twitchbotpaint.command.printHelp
+import de.brainsizzle.twitchbotpaint.MessageCallback
 
 class BotRunner(private val messageCallback: MessageCallback) {
 

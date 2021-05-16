@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.4.32"
-    java
+//    java
 }
 
 group = "de.brainsizzle"
@@ -35,4 +35,4 @@ tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "11"
 }
 
-sourceSets.main { java.srcDirs("src/main/java", "src/main/kotlin") }
+//sourceSets.main { java.srcDirs("src/main/java", "src/main/kotlin") }
