@@ -4,7 +4,7 @@ import de.brainsizzle.twitchbotpaint.ShapeLookup
 import java.awt.*
 import javax.swing.JFrame
 
-class Display(shapeLookup : ShapeLookup) {
+class Display(shapeLookup : ShapeLookup, width : Int, height : Int) {
 
     val canvas = Canvas(shapeLookup)
 
@@ -16,7 +16,7 @@ class Display(shapeLookup : ShapeLookup) {
         position(frame)
 
         frame.setSize(200, 600)
-        canvas.preferredSize = Dimension(200, 600)
+        canvas.preferredSize = Dimension(width, height)
 
         frame.contentPane.add(canvas, BorderLayout.CENTER)
         frame.pack()

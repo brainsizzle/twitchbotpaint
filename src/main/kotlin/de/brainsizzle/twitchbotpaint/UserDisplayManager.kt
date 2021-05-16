@@ -104,11 +104,13 @@ fun fabricateShape(command: Command): Shape {
 }
 
 fun fabricateRectangle(command: Command): Shape {
-    val shape = Shape(Type.Rectangle)
+    val shape = Shape(Type.Square)
     if (command.commandIntParameters.isNotEmpty())
     {
-        shape.width = limitInt(command.commandIntParameters[0], 10, 150)
-        shape.height = limitInt(command.commandIntParameters[1], 10, 150)
+        val width = limitInt(command.commandIntParameters[0], 10, 150)
+        val height = limitInt(command.commandIntParameters[1], 10, 150)
+        shape.size = height
+        shape.stretchX = width.toDouble() / height.toDouble()
     }
     return shape
 }

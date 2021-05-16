@@ -11,14 +11,14 @@ class CirclePainter {
 
         if (shape.fill) {
             g2.fillOval(
-                calcCenter(shape.position.getXCoordinate(), shape.size),
-                calcCenter(shape.position.getYCoordinate(), shape.size),
+                shape.calcBoundingBoxLeft(),
+                shape.calcBoundingBoxTop(),
                 shape.size, shape.size
             )
         } else {
             g2.drawOval(
-                calcCenter(shape.position.getXCoordinate(), shape.size),
-                calcCenter(shape.position.getYCoordinate(), shape.size),
+                shape.calcBoundingBoxLeft(),
+                shape.calcBoundingBoxTop(),
                 shape.size, shape.size
             )
         }

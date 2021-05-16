@@ -19,19 +19,39 @@ data class Shape(val type: Type) {
     var rotationDegress = 0.0
     var position: Position = Position(100.0, 100.0)
     var size: Int = 100
-    var width: Int = 100
-    var height: Int = 100
+    var stretchX = 1.0
     var color: Color = Color.BLACK
     var fill = false
 
     var animations = mutableListOf<Animation>()
+
+    fun calcBoundingBoxLeft() : Int {
+        return position.getXCoordinate() - getHalfStretchedWidth()
+    }
+
+    fun calcBoundingBoxTop() : Int {
+        return position.getYCoordinate() - size / 2
+    }
+
+    fun calcBoundingBoxRight() : Int {
+        return position.getXCoordinate() + getHalfStretchedWidth()
+    }
+
+    fun calcBoundingBoxBottom() : Int {
+        return position.getYCoordinate() + size / 2
+    }
+
+    fun getStretchedWidth() = (size * stretchX).toInt()
+
+    fun getHalfStretchedWidth() = ((size * stretchX) / 2.0).toInt()
+
+
 }
 
 enum class Type {
     Circle,
     Line,
     Square,
-    Rectangle
 }
 
 data class Position(var x: Double, var y: Double) {

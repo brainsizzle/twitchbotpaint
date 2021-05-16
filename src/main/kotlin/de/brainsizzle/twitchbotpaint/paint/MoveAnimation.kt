@@ -1,10 +1,10 @@
 package de.brainsizzle.twitchbotpaint.paint
 
-class MoveAnimation(val positionOffSet : Position, var stepsRemaining : Int) : Animation {
+class MoveAnimation(var positionOffSet : Position, var stepsRemaining : Int) : Animation {
 
     override fun animate(shape : Shape) : Boolean {
         if (stepsRemaining > 0) {
-            shape.position.move(positionOffSet)
+            MoveReflectAnimation(positionOffSet).animate(shape)
             stepsRemaining--
             return false
         }
