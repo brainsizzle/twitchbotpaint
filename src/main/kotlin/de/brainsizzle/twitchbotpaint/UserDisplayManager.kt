@@ -5,7 +5,12 @@ import de.brainsizzle.twitchbotpaint.command.CommandName
 import de.brainsizzle.twitchbotpaint.command.CommandType
 import de.brainsizzle.twitchbotpaint.paint.*
 
-fun updateDisplayData(userDisplayData: MutableMap<String, MutableList<Shape>>, user: String, commands: List<Command>) {
+fun updateDisplayData(
+    userDisplayData: MutableMap<String, MutableList<Shape>>,
+    playGround: PlayGround,
+    user: String,
+    commands: List<Command>
+) {
     val existingShapes = userDisplayData.getOrPut(user, { mutableListOf() })
     var activeShape = existingShapes.lastOrNull()
     for (command in commands) {
@@ -14,7 +19,7 @@ fun updateDisplayData(userDisplayData: MutableMap<String, MutableList<Shape>>, u
             existingShapes.add(activeShape)
         } else if (activeShape != null) {
             if (CommandType.Edit == command.commandDefinition.commandType) {
-                applyEdit(command, activeShape)
+                applyEdit(playGround, command, activeShape)
             } else if (CommandType.Delete == command.commandDefinition.commandType) {
                 existingShapes.remove(activeShape)
                 activeShape = null
@@ -23,34 +28,34 @@ fun updateDisplayData(userDisplayData: MutableMap<String, MutableList<Shape>>, u
     }
 }
 
-fun applyEdit(command: Command, shape: Shape) {
+fun applyEdit(playGround: PlayGround, command: Command, shape: Shape) {
 
     if (command.commandDefinition.commandName == CommandName.Up) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limitInt(command.commandIntParameters[0], 10, 250)
         }
-        shape.animations.add(MoveAnimation(Position(0.0, -delta/40.0), 40))
+        shape.animations.add(MoveAnimation(playGround, Position(0.0, -delta/40.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Down) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limitInt(command.commandIntParameters[0], 10, 250)
         }
-        shape.animations.add(MoveAnimation(Position(0.0, delta/40.0), 40))
+        shape.animations.add(MoveAnimation(playGround, Position(0.0, delta/40.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Left) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limitInt(command.commandIntParameters[0], 10, 150)
         }
-        shape.animations.add(MoveAnimation(Position(-delta/40.0, 0.0), 40))
+        shape.animations.add(MoveAnimation(playGround, Position(-delta/40.0, 0.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Right) {
         var delta = 30
         if (command.commandIntParameters.isNotEmpty()) {
             delta = limitInt(command.commandIntParameters[0], 10, 150)
         }
-        shape.animations.add(MoveAnimation(Position(delta/40.0, 0.0), 40))
+        shape.animations.add(MoveAnimation(playGround, Position(delta/40.0, 0.0), 40))
     } else if (command.commandDefinition.commandName == CommandName.Color) {
-        val newRgb = arrayOf(0, 0, 0);
+        val newRgb = arrayOf(0, 0, 0)
 
         if (command.commandIntParameters.size > 0) {
             newRgb[0] = limitInt(command.commandIntParameters[0], 0, 255)

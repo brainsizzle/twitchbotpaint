@@ -11,24 +11,22 @@ fun main() {
     gameLoop.init()
 }
 
-val playGroundWidth = 200
-val playGroundHeight = 600
-
 class GameLoop : MessageCallback, ShapeLookup {
 
     private val userDisplayData = mutableMapOf<String, MutableList<Shape>>()
-    private val staticShapes = mutableMapOf<String, Shape>()
 
     private var shapes = emptyList<Shape>()
     private var display : Display? = null
+
+    private val playGround = PlayGround(480, 320)
 
     fun init() {
         initDisplay()
         initCommands()
 //        initDefaultShapes()
 
-        initBotRunner()
-        // initConsoleInput()
+        // initBotRunner()
+        initConsoleInput()
 
         initBouncingBall()
 
@@ -37,15 +35,30 @@ class GameLoop : MessageCallback, ShapeLookup {
     }
 
     fun initBouncingBall() {
+
+        val topBoundary = Shape(Type.Square, CollisionMode.Collision)
+        topBoundary.size = 12
+        topBoundary.position = Position(playGround.getCenter().x, 40.0)
+        topBoundary.stretchX = (playGround.width - 12).toDouble() / topBoundary.size.toDouble()
+        topBoundary.fill = true
+        playGround.staticShapes.put("topBoundary", topBoundary)
+
+        val lowerBoundary = Shape(Type.Square, CollisionMode.Collision)
+        lowerBoundary.size = 12
+        lowerBoundary.position = Position(playGround.getCenter().x, (playGround.height - lowerBoundary.size - 4).toDouble())
+        lowerBoundary.stretchX = (playGround.width - 12).toDouble() / lowerBoundary.size.toDouble()
+        lowerBoundary.fill = true
+        playGround.staticShapes.put("lowerBoundary", lowerBoundary)
+
         val value = Shape(Type.Circle)
         value.size = 20
-        value.animations.add(MoveReflectAnimation(Position(1.0, 1.0)))
-        staticShapes.put("ball", value)
+        value.animations.add(MoveReflectAnimation(playGround, Position(1.0, 1.0)))
+        playGround.staticShapes.put("ball", value)
         updateShapes()
     }
 
     fun initDisplay() {
-        display = Display(this, playGroundWidth, playGroundHeight)
+        display = Display(this )
     }
 
     fun startLoop() {
@@ -69,13 +82,17 @@ class GameLoop : MessageCallback, ShapeLookup {
 
     fun initDefaultShapes() {
         //      to init canvas with any shape
-        updateDisplayData(userDisplayData, "dumm1", parseCommands("square 80 col 0 125 255"))
+        updateDisplayData(userDisplayData, playGround, "dumm1", parseCommands("square 80 col 0 125 255"))
         updateShapes()
         display?.canvas?.repaint()
     }
 
     override fun calcShapes(): List<Shape> {
         return shapes
+    }
+
+    override fun getPlayGround(): PlayGround {
+        return playGround
     }
 
     override fun handlePaintMessage(userName: String, messagePayload: String): String? {
@@ -86,7 +103,7 @@ class GameLoop : MessageCallback, ShapeLookup {
 
                 returnMessage = printToChat(parsedCommands)
 
-                updateDisplayData(userDisplayData, userName, parsedCommands)
+                updateDisplayData(userDisplayData, playGround, userName, parsedCommands)
                 updateShapes()
                 display?.canvas?.repaint()
             }
@@ -113,7 +130,7 @@ class GameLoop : MessageCallback, ShapeLookup {
 
     private fun updateShapes() {
         val transformToShapes = transformToShapes(userDisplayData)
-        transformToShapes.addAll(staticShapes.values)
+        transformToShapes.addAll(playGround.staticShapes.values)
         shapes = transformToShapes
     }
 

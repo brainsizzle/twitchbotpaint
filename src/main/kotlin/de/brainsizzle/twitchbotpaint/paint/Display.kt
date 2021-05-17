@@ -4,9 +4,11 @@ import de.brainsizzle.twitchbotpaint.ShapeLookup
 import java.awt.*
 import javax.swing.JFrame
 
-class Display(shapeLookup : ShapeLookup, width : Int, height : Int) {
+class Display(shapeLookup : ShapeLookup) {
 
     val canvas = Canvas(shapeLookup)
+    val width = shapeLookup.getPlayGround().width
+    val height = shapeLookup.getPlayGround().height
 
     init {
         val frame = JFrame("twitchbotpaint")

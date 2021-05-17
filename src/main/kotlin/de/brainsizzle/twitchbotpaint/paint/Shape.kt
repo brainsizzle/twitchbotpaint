@@ -1,8 +1,9 @@
 package de.brainsizzle.twitchbotpaint.paint
 
 import java.awt.Color
+import java.awt.Rectangle
 
-data class Shape(val type: Type) {
+data class Shape(val type: Type, val collisionMode: CollisionMode = CollisionMode.None) {
 
     fun getRenderingColor(): Color {
         return color
@@ -45,6 +46,14 @@ data class Shape(val type: Type) {
 
     fun getHalfStretchedWidth() = ((size * stretchX) / 2.0).toInt()
 
+    fun getBoundingBox(): Rectangle {
+       return Rectangle(
+            calcBoundingBoxLeft(),
+            calcBoundingBoxTop(),
+            getStretchedWidth(),
+            size)
+    }
+
 
 }
 
@@ -52,6 +61,12 @@ enum class Type {
     Circle,
     Line,
     Square,
+}
+
+enum class CollisionMode {
+    None,
+    Collision,
+    Event
 }
 
 data class Position(var x: Double, var y: Double) {

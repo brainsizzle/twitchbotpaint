@@ -1,30 +1,73 @@
 package de.brainsizzle.twitchbotpaint.paint
 
-import de.brainsizzle.twitchbotpaint.playGroundHeight
-import de.brainsizzle.twitchbotpaint.playGroundWidth
+import de.brainsizzle.twitchbotpaint.PlayGround
 
-class MoveReflectAnimation(var positionOffSet : Position) : Animation {
+class MoveReflectAnimation(val playGround: PlayGround, var positionOffSet : Position) : Animation {
 
     override fun animate(shape : Shape) : Boolean {
 
-        if (shape.calcBoundingBoxRight() >= playGroundWidth) {
-            positionOffSet.x *= -1
-        }
+        val collisionWithBoundingBox = collisionWithBoundingBox(shape)
 
-        if (shape.calcBoundingBoxLeft() <= 0) {
-            positionOffSet.x *= -1
-        }
+        if (!collisionWithBoundingBox) {
 
-      if (shape.calcBoundingBoxTop() <= 0) {
-            positionOffSet.y *= -1
-        }
+            val originPosition = shape.position.copy()
 
-        if (shape.calcBoundingBoxBottom() >= playGroundHeight) {
-            positionOffSet.y *= -1
+            val movedYPosition = shape.position.copy()
+            movedYPosition.move(positionOffSet.copy(x = 0.0))
+
+            val movedXPosition = shape.position.copy()
+            movedXPosition.move(positionOffSet.copy(y = 0.0))
+
+            shape.position = movedXPosition
+            val boundingBoxMovedX = shape.getBoundingBox()
+
+            shape.position = movedYPosition
+            val boundingBoxMovedY = shape.getBoundingBox()
+
+            shape.position = originPosition
+
+            for (staticShape in playGround.staticShapes) {
+                // self
+                if (shape == staticShape.value) {
+                    continue
+                }
+                if (staticShape.value.collisionMode != CollisionMode.Collision) {
+                    continue
+                }
+                val otherBoundindBox = staticShape.value.getBoundingBox()
+                if (boundingBoxMovedX.intersects(otherBoundindBox)) {
+                    positionOffSet.x *= -1
+                }
+                if (boundingBoxMovedY.intersects(otherBoundindBox)) {
+                    positionOffSet.y *= -1
+                }
+            }
         }
 
         shape.position.move(positionOffSet)
 
+
         return false
+    }
+
+    private fun collisionWithBoundingBox(shape: Shape) : Boolean {
+
+        var collision = false
+        if (shape.calcBoundingBoxRight() >= playGround.width) {
+            positionOffSet.x *= -1
+            collision = true
+        } else if (shape.calcBoundingBoxLeft() <= 0) {
+            positionOffSet.x *= -1
+            collision = true
+        }
+
+        if (shape.calcBoundingBoxTop() <= 0) {
+            positionOffSet.y *= -1
+            collision = true
+        } else if (shape.calcBoundingBoxBottom() >= playGround.height) {
+            positionOffSet.y *= -1
+            collision = true
+        }
+        return collision
     }
 }

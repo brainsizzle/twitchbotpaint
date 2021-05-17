@@ -13,11 +13,19 @@ class RectanglePainter {
         val position = shape.position
         g2.rotate(Math.toRadians(shape.rotationDegress),  position.x, position.y)
 
-        g2.drawRect(
-            shape.calcBoundingBoxLeft(),
-            shape.calcBoundingBoxTop(),
-            shape.getStretchedWidth(), shape.size
-        )
+        if (shape.fill) {
+            g2.fillRect(
+                shape.calcBoundingBoxLeft(),
+                shape.calcBoundingBoxTop(),
+                shape.getStretchedWidth(),
+                shape.size)
+        } else {
+            g2.drawRect(
+                shape.calcBoundingBoxLeft(),
+                shape.calcBoundingBoxTop(),
+                shape.getStretchedWidth(), shape.size
+            )
+        }
 
         g2.transform = previousTransform
     }
